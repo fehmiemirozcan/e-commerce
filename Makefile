@@ -3,7 +3,7 @@ APP_NAME=ecommerce
 MAIN_FILE=cmd/ecommerce/main.go
 
 # Bu hedefler gerçek dosya değil.
-.PHONY: help dev build clean up down
+.PHONY: help dev build rebuild clean up down restart logs logs-app logs-worker migrate migrate-down create-admin seed test test-backend lint tidy
 
 ## help: Kullanılabilecek komutları listeler.
 help:
@@ -20,6 +20,9 @@ build:
 	@echo "Uygulama Derleniyor."
 	go build -o $(APP_NAME) $(MAIN_FILE)
 
+## rebuild: Eski derlemeyi temizleyip yeniden derler.
+rebuild: clean build
+
 ## clean: Derlenmiş eski dosyaları temizler.
 clean:
 	@echo "Derlenmiş dosyalar temizleniyor."
@@ -34,6 +37,21 @@ up:
 down:
 	@echo "Servisler Durduruluyor."
 	docker compose down
+
+## restart: Docker servislerini yeniden başlatır.
+restart: down up
+
+## logs: Tüm Docker servis loglarını takip eder.
+logs:
+	docker compose logs -f
+
+## logs-app: Sadece app servisinin loglarını takip eder.
+logs-app:
+	docker compose logs -f app
+
+## logs-worker: Sadece worker servisinin loglarını takip eder.
+logs-worker:
+	docker compose logs -f worker
 
 ## migrate: Tablolar oluşturulur.
 migrate: 
@@ -54,6 +72,16 @@ create-admin:
 seed:
 	@echo "Veritabanına sahte veriler (seed) ekleniyor..."
 	go run $(MAIN_FILE) seed
+
+## test: Tüm testleri çalıştırır.
+test:
+	@echo "Testler çalıştırılıyor..."
+	go test ./...
+
+## test-backend: Backend testlerini çalıştırır.
+test-backend:
+	@echo "Backend testleri çalıştırılıyor..."
+	go test ./internal/...
 
 ## lint: Kodda olası hataları ve kötü kullanımları tarar.
 lint:

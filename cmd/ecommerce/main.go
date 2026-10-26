@@ -92,6 +92,7 @@ func main() {
 		}
 		fmt.Println("The system was successfully restored/Sistem başarıyla geri alındı")
 	case "seed":
+		fmt.Println("Seed feature is not yet configured / Seed özelliği henüz yapılandırılmadı")
 	case "worker":
 		fmt.Println("Starting worker/İşçi başlatılıyor")
 
@@ -163,7 +164,7 @@ func main() {
 		}
 
 	case "create-admin":
-		fmt.Println("The admin account is shaking/Admin heasbı oluşturuluyor")
+		fmt.Println("Creating admin account / Admin hesabı oluşturuluyor")
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("Name: ")
 		name, _ := reader.ReadString('\n')

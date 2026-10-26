@@ -216,23 +216,3 @@ func CreateAdmin(ctx context.Context, db *pgxpool.Pool, name, email, password st
 	return newID, nil
 }
 
-type Order struct {
-	ID          int
-	Status      string
-	TotalAmount float64
-}
-
-func GetOrderByIDAndUser(ctx context.Context, db *pgxpool.Pool, orderID, userID int) (*Order, error) {
-	query := `
-	SELECT id,status, total_amount 
-	FROM orders 
-	WHERE id = $1 AND user_id = $2
-	`
-	var order Order
-	error := db.QueryRow(ctx, query, orderID, userID).Scan(&order.ID, &order.Status, &order.TotalAmount)
-
-	if error != nil {
-		return nil, error
-	}
-	return &order, nil
-}
